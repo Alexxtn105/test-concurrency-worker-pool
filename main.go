@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
 	fmt.Println("Start processing tasks...")
@@ -31,11 +33,21 @@ func main() {
 
 	// Создаем пул воркеров с заданиями и устанавливаем максимальное количество выполняемых заданий 5
 	wp := WorkerPool{
+		Concurrency: 5,
 		Tasks:       tasks,
-		concurrency: 5,
 	}
 
 	// запускаем пул воркеров для обработки заданий
 	wp.Run()
 	fmt.Println("All tasks have been processed")
 }
+
+//func main() {
+//wp := WorkerPool{
+//Concurrency: 5,
+//TaskPool: sync.Pool{
+//New: func() interface{} {
+//return &Task{}
+//},
+//},
+//}
