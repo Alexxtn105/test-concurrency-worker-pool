@@ -80,13 +80,13 @@ func (wp *WorkerPool) Run() {
 	// инициализируем буферизованный канал длиной по количеству заданий
 	wp.tasksChan = make(chan Task, len(wp.Tasks))
 
+	// добавляем счетчик WaitGroup по количеству заданий
+	wp.wg.Add(len(wp.Tasks))
+
 	// запускаем горутины воркеров (устанавливается в переменной concurrency)
 	for i := 0; i < wp.concurrency; i++ {
 		go wp.worker()
 	}
-
-	// добавляем счетчик WaitGroup по количеству заданий
-	wp.wg.Add(len(wp.Tasks))
 
 	// отправляем задания в канал
 	for _, task := range wp.Tasks {
