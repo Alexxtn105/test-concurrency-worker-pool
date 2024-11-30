@@ -6,17 +6,54 @@ import (
 	"time"
 )
 
-// Task Задача
-type Task struct {
-	ID int
-}
+//region Для случая, если работаю только задачи одного типа (без использования интерфейса)
+
+// Task Задача. В данном случае воркер может выполнять задачи только такого типа. Если нужны другие задачи, необходимо использовать interface
+//type Task struct {
+//	ID int
+//}
 
 // Process Метод, выполняемый задачей
-func (t *Task) Process() {
+//func (t *Task) Process() {
+//	// симулируем длительную операцию
+//	fmt.Println("Processing task ", t.ID)
+//	time.Sleep(2 * time.Second)
+//}
+
+//endregion
+
+//region Для случая различных по типу заданий заведем интерфейс:
+
+// Task Интерфейс задания
+type Task interface {
+	Process()
+}
+
+// Предположим, что у нас два типа заданий: 1- отправка почты, 2 - обработка изображений
+
+type EmailTask struct {
+	Email   string
+	Subject string
+	Message string
+}
+
+func (e *EmailTask) Process() {
 	// симулируем длительную операцию
-	fmt.Println("Processing task ", t.ID)
+	fmt.Printf("Sending Email to %s, subject: %s, message: %s\n", e.Email, e.Subject, e.Message)
 	time.Sleep(2 * time.Second)
 }
+
+type ImageProcessingTask struct {
+	ImageUrl string
+}
+
+func (i *ImageProcessingTask) Process() {
+	// симулируем длительную операцию
+	fmt.Printf("Processing image: %s\n", i.ImageUrl)
+	time.Sleep(5 * time.Second)
+}
+
+//endregion
 
 // WorkerPool Пул воркеров
 type WorkerPool struct {
